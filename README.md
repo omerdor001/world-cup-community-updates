@@ -99,11 +99,17 @@ Game event JSON contains:
 **Parser provided:** `event.h` and `event.cpp` with  
 `parseEventsFile(std::string json_path)`  
 
-### Implementation Tips
-- Start by implementing `Connections<T>` for server (works for both TPC & Reactor)  
-- Test with `echo` example first  
-- Client threads should use thread-safe communication (queue/mutex)  
-- Respect STOMP frame format: `headers\n\nbody\0`  
-- Use `receipt` headers for acknowledgements  
-- Maintain per-user game events in a map for `summary`
+### How to Run
+1. Navigate to the `Client` directory:  
+   ```bash
+   cd Client
+   ```
+2. Build the client using the provided Makefile:
+    ```bash
+   make
+   ```
+3. Run the client executable:
+   ```bash
+   ./bin/StompWCIClient
+   ```
 
