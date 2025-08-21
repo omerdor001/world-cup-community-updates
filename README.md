@@ -99,7 +99,7 @@ Game event JSON contains:
 **Parser provided:** `event.h` and `event.cpp` with  
 `parseEventsFile(std::string json_path)`  
 
-### How to Run
+### Run Commands
 1. Navigate to the `Client` directory:  
    ```bash
    cd Client
