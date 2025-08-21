@@ -49,6 +49,7 @@ mvn exec:java -Dexec.mainClass="bgu.spl.net.impl.stomp.StompServer" -Dexec.args=
 
 # Reactor server
 mvn exec:java -Dexec.mainClass="bgu.spl.net.impl.stomp.StompServer" -Dexec.args="<port> reactor"
+```
 
 ### STOMP Protocol Frames
 
@@ -66,3 +67,43 @@ mvn exec:java -Dexec.mainClass="bgu.spl.net.impl.stomp.StompServer" -Dexec.args=
 - ERROR
 
 ## Client (C++)
+
+### Executable
+`bin/StompWCIClient`
+
+### Threads
+- **Keyboard thread**: Reads user commands and sends STOMP frames.  
+- **Socket thread**: Listens to incoming frames from the server.  
+
+### Commands
+- `login {host:port} {username} {password}`  
+- `join {game_name}`  
+- `exit {game_name}`  
+- `report {file.json}` — Sends game events to server  
+- `summary {game_name} {user} {file}` — Outputs game summary  
+- `logout`  
+
+### Error Handling
+- Login errors (`wrong password`, `already logged in`)  
+- Frame errors from server  
+- Receipt acknowledgements for join/exit/logout  
+
+### Game Events
+Game event JSON contains:
+- `event name`  
+- `time` (in seconds)  
+- `general game updates` (global stats)  
+- `team a updates`, `team b updates`  
+- `description`  
+
+**Parser provided:** `event.h` and `event.cpp` with  
+`parseEventsFile(std::string json_path)`  
+
+### Implementation Tips
+- Start by implementing `Connections<T>` for server (works for both TPC & Reactor)  
+- Test with `echo` example first  
+- Client threads should use thread-safe communication (queue/mutex)  
+- Respect STOMP frame format: `headers\n\nbody\0`  
+- Use `receipt` headers for acknowledgements  
+- Maintain per-user game events in a map for `summary`
+
